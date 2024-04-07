@@ -47,17 +47,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            {{-- <div class="col-3">
                 <a href="{{ route('showproducts') }}" class="btn btn-primary ">
                     <span>Show All Product</span>
                 </a>
-            </div>
+            </div> --}}
             <div class="col-6">
-                <form action="{{ route('searchproducts') }}" method="post">
+                <form action="{{ route('products') }}" method="get">
                     @csrf
                     <div class="row ">
                         <div class="col p-0">
-                            <input type="text" class="form-control" name="product_name">
+                            <input type="text" class="form-control" name="search">
                         </div>
                         <div class="col-auto ">
                             <button type="submit" class="btn btn-primary">Search</button>

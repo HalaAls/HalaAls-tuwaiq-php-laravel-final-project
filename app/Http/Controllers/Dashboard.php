@@ -29,10 +29,14 @@ class Dashboard extends Controller
         return view('dashboard.index');
     }
 
-    public function GetProducts()
+    public function GetProducts(Request $request)
     {
-        $products = Product::all();
-
+        if ($request->search) {
+            $productName = $request->search;
+            $products = Product::where('product_name', 'like', "%$productName%")->get();
+        } else {
+            $products = Product::all();
+        }
         return view('dashboard.products', ['products' => $products]);
     }
 
@@ -81,7 +85,6 @@ class Dashboard extends Controller
     {
         $productName = $request->Productname;
         $products = Product::where('product_name', 'like', "%$productName%")->get();
-        // $products = Product::where('product_name', $request->Productname)->get();
 
         return view('dashboard.products', ['products' => $products]);
     }
@@ -95,22 +98,29 @@ class Dashboard extends Controller
 
 
     // Products Details
-    public function GetProductDetails()
+    public function GetProductDetails(Request $request)
     {
 
-        $data = DB::table('products')
-            ->join('product_details', 'products.id', '=', 'product_details.product_id')
-            ->select(
-                'products.product_name',
-                'product_details.id',
-                'product_details.product_id',
-                'product_details.color',
-                'product_details.price',
-                'product_details.qty',
-                'product_details.description',
-            )
-            ->get();
-
+        if ($request->search) {
+            $name = $request->search;
+            $data = DB::table('products')
+                ->join('product_details', 'products.id', '=', 'product_details.product_id')
+                ->where('products.product_name', 'like', "%$name%")
+                ->get();
+        } else {
+            $data = DB::table('products')
+                ->join('product_details', 'products.id', '=', 'product_details.product_id')
+                ->select(
+                    'products.product_name',
+                    'product_details.id',
+                    'product_details.product_id',
+                    'product_details.color',
+                    'product_details.price',
+                    'product_details.qty',
+                    'product_details.description',
+                )
+                ->get();
+        }
         return view('dashboard.productDetails', ['data' => $data]);
     }
 
