@@ -23,9 +23,19 @@
                             <form action="{{ route('createproduct') }}" method="post">
                                 <div class="modal-body">
                                     @csrf
-                                    <input type="hidden" name="Productid" id="Productid">
-                                    <input type="text" class="form-control" name="Productname">
+                                    <input type="hidden" name="product_id" id="product_id">
+                                    {{-- <input type="text" class="form-control" name="product_name"> --}}
 
+
+                                    <label for="product_name">Product Name</label>
+                                    <input type="text" id='product_name'
+                                        class="form-control @error('product_name') is-invalid @enderror" name="product_name"
+                                        value="{{ old('product_name') }}" name="product_name" placeholder="Product Name">
+                                    @error('product_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -47,7 +57,7 @@
                     @csrf
                     <div class="row ">
                         <div class="col p-0">
-                            <input type="text" class="form-control" name="Productname">
+                            <input type="text" class="form-control" name="product_name">
                         </div>
                         <div class="col-auto ">
                             <button type="submit" class="btn btn-primary">Search</button>
@@ -98,11 +108,19 @@
     <script>
         function fillEditForm(id, productName) {
             // Set the product name field value
-            document.querySelector('input[name="Productname"]').value = productName;
-            document.getElementById('Productid').value = id;
+            document.querySelector('input[name="product_name"]').value = productName;
+            document.getElementById('product_id').value = id;
 
             // Set the action attribute of the form with the edit route
             document.querySelector('form').setAttribute('action', '/dashboard/updateproduct');
+        }
+
+        var validationErrors = @json($errors->all());
+        if (validationErrors.length > 0) {
+            document.addEventListener('DOMContentLoaded', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                myModal.show();
+            });
         }
     </script>
 @endsection
