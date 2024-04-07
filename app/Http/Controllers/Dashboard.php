@@ -49,7 +49,7 @@ class Dashboard extends Controller
         ]);
 
         $product = Product::create([
-            'product_name' => $request->Productname
+            'product_name' => $request->product_name
         ]);
         $product->save();
 
@@ -100,6 +100,7 @@ class Dashboard extends Controller
     // Products Details
     public function GetProductDetails(Request $request)
     {
+        $products = Product::all();
 
         if ($request->search) {
             $name = $request->search;
@@ -108,6 +109,7 @@ class Dashboard extends Controller
                 ->where('products.product_name', 'like', "%$name%")
                 ->get();
         } else {
+
             $data = DB::table('products')
                 ->join('product_details', 'products.id', '=', 'product_details.product_id')
                 ->select(
@@ -121,7 +123,7 @@ class Dashboard extends Controller
                 )
                 ->get();
         }
-        return view('dashboard.productDetails', ['data' => $data]);
+        return view('dashboard.productDetails', ['data' => $data, 'products' => $products]);
     }
 
 

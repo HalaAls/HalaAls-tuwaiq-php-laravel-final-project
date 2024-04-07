@@ -32,8 +32,8 @@
                                             <select name="product_id" id="product_id"
                                                 class="form-control @error('product_id') is-invalid @enderror"
                                                 name="product_id" value="{{ old('product_id') }}">
-                                                @foreach ($data as $item)
-                                                    <option value="{{ $item->product_id }}">{{ $item->product_name }}
+                                                @foreach ($products as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->product_name }}
                                                     </option>
                                                 @endforeach
                                             </select>
