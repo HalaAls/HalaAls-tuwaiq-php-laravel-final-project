@@ -7,7 +7,7 @@
             <div class="col-3">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <span> Add New Product</span>
+                    <span> {{ __('messages.AddNewProduct') }} </span>
                 </button>
 
                 <!-- Modal -->
@@ -16,7 +16,8 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5 text-dark" id="exampleModalLabel">Add New Product</h1>
+                                <h1 class="modal-title fs-5 text-dark" id="exampleModalLabel">
+                                    {{ __('messages.AddNewProduct') }}</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -27,10 +28,11 @@
                                     {{-- <input type="text" class="form-control" name="product_name"> --}}
 
 
-                                    <label for="product_name">Product Name</label>
+                                    <label for="product_name">{{ __('messages.ProductName') }}</label>
                                     <input type="text" id='product_name'
                                         class="form-control @error('product_name') is-invalid @enderror" name="product_name"
-                                        value="{{ old('product_name') }}" name="product_name" placeholder="Product Name">
+                                        value="{{ old('product_name') }}" name="product_name"
+                                        placeholder="{{ __('messages.ProductName') }}">
                                     @error('product_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -38,8 +40,9 @@
                                     @enderror
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{{ __('messages.Close') }}</button>
+                                    <button type="submit" class="btn btn-primary">{{ __('messages.SaveChanges') }}</button>
                                 </div>
                             </form>
 
@@ -60,7 +63,7 @@
                             <input type="text" class="form-control" name="search">
                         </div>
                         <div class="col-auto ">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary">{{ __('messages.Search') }}</button>
                         </div>
                     </div>
                 </form>
@@ -74,9 +77,9 @@
                     <div class="card-body">
                         <table class="table table-border text-center">
                             <thead>
-                                <th>ID</th>
-                                <th>Product Name</th>
-                                <th colspan="2">Actions</th>
+                                <th>{{ __('messages.ID') }}</th>
+                                <th>{{ __('messages.ProductName') }}</th>
+                                <th colspan="2">{{ __('messages.Actions') }}</th>
                             </thead>
 
                             <tbody>

@@ -16,7 +16,6 @@
                         <p class="card-text">{{ $item->description }}</p>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $item->color }}</li>
                         <li class="list-group-item">
                             <span class="card-text text-danger">
                                 <del>${{ $item->total }}</del>
@@ -26,7 +25,7 @@
                         </li>
                     </ul>
                     <div class="card-footer">
-                        <a href="{{ route('details', ['id' => $item->id]) }}" class="btn btn-primary">Go somewhere</a>
+                        <a href="{{ route('details', ['id' => $item->id]) }}" class="btn btn-primary">{{ __('messages.More') }}</a>
 
                     </div>
                 </div>

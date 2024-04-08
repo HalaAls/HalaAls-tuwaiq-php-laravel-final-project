@@ -7,6 +7,7 @@ use App\Models\ProductDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class Dashboard extends Controller
@@ -116,10 +117,12 @@ class Dashboard extends Controller
                     'products.product_name',
                     'product_details.id',
                     'product_details.product_id',
-                    'product_details.color',
                     'product_details.price',
                     'product_details.qty',
                     'product_details.description',
+                    'product_details.category',
+                    'product_details.image',
+                    'product_details.file'
                 )
                 ->get();
         }
@@ -130,19 +133,47 @@ class Dashboard extends Controller
     public function createProductDetails(Request $request)
     {
         $validatedData = $request->validate([
-            'color' => 'required|string|max:20',
             'price' => 'required|numeric',
             'qty' => 'required|numeric',
             'description' => 'required|string|max:255',
             'product_id' => Rule::exists('products', 'id'), // check that it exists in the 'products' table
+            'category' => 'required | string',
+
         ]);
 
+        if ($request->hasFile('file')) {
+
+            $filenameWithExt = $request->file('file')->getClientOriginalName();
+
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+            $extension = $request->file('file')->getClientOriginalExtension();
+
+            $fileNameToStore = $filename . '-' . time() . '.' . $extension;
+
+            $path = $request->file('file')->storeAs('public/assets/file', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'default.png';
+        }
+
+        $imageName = '';
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('/assets/images'), $imageName);
+        } else {
+            $imageName = 'default.png';
+        }
+
+
         $product = ProductDetails::create([
-            'color' => $request->color,
             'price' => $request->price,
             'qty' => $request->qty,
             'description' => $request->description,
-            'product_id' => $request->product_id
+            'product_id' => $request->product_id,
+            'category' => $request->category,
+            'image' =>  $imageName,
+            'file' => $fileNameToStore
+
         ]);
 
         $product->save();
@@ -162,13 +193,44 @@ class Dashboard extends Controller
 
     public function UpdateProductDetail(Request $request)
     {
+        // dd($request);
+
+        if ($request->hasFile('file')) {
+
+            $filenameWithExt = $request->file('file')->getClientOriginalName();
+
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+            $extension = $request->file('file')->getClientOriginalExtension();
+
+            $fileNameToStore = $filename . '-' . time() . '.' . $extension;
+
+            $path = $request->file('file')->storeAs('public/assets/file', $fileNameToStore);
+        } else {
+            $existingProduct = ProductDetails::find($request->id);
+            $fileNameToStore = $existingProduct->file; // use the existing pdf filename       
+        }
+
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('/assets/images'), $imageName);
+        } else {
+            $existingProduct = ProductDetails::find($request->id);
+            $imageName = $existingProduct->image; // use the existing image filename
+        }
+
         $product = ProductDetails::where('id', $request->id)->update([
-            'color' => $request->color,
             'price' => $request->price,
             'qty' => $request->qty,
             'description' => $request->description,
-            'product_id' => $request->product_id
+            'product_id' => $request->product_id,
+            'category' => $request->category,
+            'image' =>  $imageName,
+            'file' => $fileNameToStore
         ]);
+
+
 
         return Redirect('/dashboard/productdetails');
     }
